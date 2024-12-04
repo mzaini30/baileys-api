@@ -46,3 +46,6 @@ nav ul li a {
 nav ul li a.active {
     color: white;
 }
+.hidden {
+    display: none;
+}

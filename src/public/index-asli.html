@@ -4,9 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WA Marketing</title>
-    <!-- <link rel="icon" href="/favicon.jpg" /> -->
-    <link rel="stylesheet" href="./bootstrap.min.css" />
+    <title>Home</title>
+    <link rel="icon" href="/favicon.jpg" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="/global.css" />
 
     <!-- SOCKET.IO -->
@@ -15,61 +18,9 @@
     <script>
       const socket = io();
     </script>
-    <style>
-      .inner {
-        padding: 20px;
-      }
-    </style>
   </head>
   <body>
-    <!-- bagian baru -->
-    <div class="inner">
-      <div class="row">
-        <div class="col-md-4">
-          <p><strong>List Nomor WA</strong> (jangan langsung banyak)</p>
-          <textarea
-            name=""
-            class="form-control nomor"
-            placeholder="6281234567890
-6281234567890
-6281234567890"
-            rows="20"
-            id=""
-          ></textarea>
-        </div>
-        <div class="col-md-4">
-          <p><strong>Teks WA</strong></p>
-          <textarea
-            name=""
-            class="form-control pesan"
-            placeholder="Teks WA yang mau disampaikan, tulis di sini"
-            rows="20"
-            id=""
-          ></textarea>
-          <div>
-            <button class="btn btn-success tombol" onclick="kirimPesan()">
-              Kirim
-            </button>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <p><strong>Status</strong></p>
-          <pre class="" id="pre" style="">
-{
-    message: "Here all the json will show"
-}</pre
-          >
-          <div>
-            <button class="btn btn-danger delete-token" onclick="">
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- lawas yang di bawah ini -->
-    <nav class="hidden">
+    <nav class="">
       <ul>
         <li class="active">
           <a href="/" class="active">home</a>
@@ -86,7 +37,7 @@
       </ul>
     </nav>
 
-    <div id="wrapper" class="container-fluid row hidden">
+    <div id="wrapper" class="container-fluid row ">
       <div class="col-md-6">
         <form id="token-form">
           <div>
@@ -104,7 +55,7 @@
             <button
               type="button"
               name="delete"
-              class="btn btn-sm btn-danger delete-token-backup"
+              class="btn btn-sm btn-danger delete-token"
             >
               delete
             </button>
@@ -163,7 +114,7 @@
       </div>
     </div>
     <!-- THIS JUST PRE FOR SHOWING THE JSON FROM SERVER -->
-    <pre class="hidden" id="pre" style="margin-top: 100px">
+    <pre class="" id="pre" style="margin-top: 100px">
 {
     message: "Here all the json will show"
 }</pre
@@ -249,68 +200,7 @@
             );
           }
         });
-      function formatWaNumber(number) {
-        // Hapus semua spasi, tanda plus, dan tanda hubung
-        let cleanedNumber = number.replace(/[\s\-+]/g, "");
 
-        // Jika sudah dimulai dengan "62", kembalikan langsung
-        if (cleanedNumber.startsWith("62")) {
-          return cleanedNumber;
-        }
-
-        // Jika dimulai dengan "0", ganti dengan "62"
-        if (cleanedNumber.startsWith("0")) {
-          return "62" + cleanedNumber.slice(1);
-        }
-
-        // Jika formatnya tidak dikenali, kembalikan null atau pesan error
-        return null;
-      }
-      async function kirimPesan() {
-        let nomor = document.querySelector(".nomor");
-        let pesan = document.querySelector(".pesan");
-        let tombol = document.querySelector(".tombol");
-        nomor = nomor.value
-          .split("\n")
-          .filter((x) => x)
-          .map((x) => {
-            return formatWaNumber(x) + "@s.whatsapp.net";
-          });
-        console.log(nomor);
-
-        tombol.classList.add("hidden");
-        let banyakNomor = nomor.length;
-        let nomorSelesai = 0;
-
-        for (let x of nomor) {
-          const dataPost = {
-            token: checkToken.value,
-            number: x,
-            text: pesan.value,
-          };
-          const req = await fetch("/api/whatsapp/send-text", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization:
-                "Basic TmRhbHUtc2VydmVyLXVVZGtmZ2xpNzgzcGtmbmxhc2tvZ29pZ2hyOg==",
-            },
-            body: JSON.stringify(dataPost),
-          });
-          const res = await req.json();
-          if (res.status) {
-            // message.value = "";
-            pre.innerHTML = JSON.stringify(res, undefined, 2);
-          }
-          // Tambahkan jeda 1 detik
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-
-          nomorSelesai++;
-          if (nomorSelesai >= banyakNomor) {
-            tombol.classList.remove("hidden");
-          }
-        }
-      }
       // TRIAL SEND MESSAGE
       async function sendMessage() {
         const number = document.querySelector(".number");
