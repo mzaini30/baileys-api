@@ -310,6 +310,9 @@
 
         total.innerText = banyakNomor;
         meter.setAttribute("max", banyakNomor);
+        meter.setAttribute("low", ~~(banyakNomor * 0.33)); // 33
+        meter.setAttribute("high", ~~(banyakNomor * 0.66)); // 66
+        meter.setAttribute("optimum", ~~(banyakNomor * 0.8)); // 80
         bagianMeter.classList.remove("hidden");
 
         for (let x of nomor) {
