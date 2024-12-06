@@ -190,6 +190,14 @@
     <!-- THIS INPUT IS FOR POST TOKEN -->
 
     <script>
+      let pesan = document.querySelector(".pesan");
+      pesan.addEventListener("input", () => {
+        localStorage.pesan = pesan.value;
+      });
+      if (localStorage.pesan) {
+        pesan.value = localStorage.pesan;
+      }
+
       // prompter optional
       const pre = document.querySelector("#pre");
       // element token or your PHP session/database token
