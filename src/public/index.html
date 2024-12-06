@@ -334,17 +334,23 @@
           if (res.status) {
             // message.value = "";
             pre.innerHTML = JSON.stringify(res, undefined, 2);
-          }
-          // Tambahkan jeda 1 detik
-          await new Promise((resolve) => setTimeout(resolve, 1000));
 
-          nomorSelesai++;
-          sekarang.innerText = nomorSelesai;
-          meter.value = nomorSelesai;
+            // Tambahkan jeda 1 detik
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
-          if (nomorSelesai >= banyakNomor) {
-            tombol.classList.remove("hidden");
-            bagianMeter.classList.add("hidden");
+            // Tambahkan jeda 10 detik setiap 10 nomor
+            if (nomorSelesai % 10 == 0) {
+              await new Promise((resolve) => setTimeout(resolve, 10000));
+            }
+
+            nomorSelesai++;
+            sekarang.innerText = nomorSelesai;
+            meter.value = nomorSelesai;
+
+            if (nomorSelesai >= banyakNomor) {
+              tombol.classList.remove("hidden");
+              bagianMeter.classList.add("hidden");
+            }
           }
         }
       }
