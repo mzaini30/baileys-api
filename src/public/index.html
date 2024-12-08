@@ -347,12 +347,12 @@
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             // Tambahkan jeda 10 detik setiap 10 nomor
-            if (nomorSelesai % 10 == 0) {
+            if (nomorSelesai % 10 == 0 && nomorSelesai != 0) {
               await new Promise((resolve) => setTimeout(resolve, 10000));
             }
 
             // tambahkan jeda 5 menit setiap 50 nomor
-            if (nomorSelesai % 50 == 0) {
+            if (nomorSelesai % 50 == 0 && nomorSelesai != 0) {
               await new Promise((resolve) => setTimeout(resolve, 300000));
             }
 
