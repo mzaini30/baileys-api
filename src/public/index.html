@@ -351,6 +351,11 @@
               await new Promise((resolve) => setTimeout(resolve, 10000));
             }
 
+            // tambahkan jeda 5 menit setiap 50 nomor
+            if (nomorSelesai % 50 == 0) {
+              await new Promise((resolve) => setTimeout(resolve, 300000));
+            }
+
             nomorSelesai++;
             sekarang.innerText = nomorSelesai;
             meter.value = nomorSelesai;
