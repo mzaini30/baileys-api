@@ -1,5 +1,5 @@
 {
-  "name": "baileys-api",
+  "name": "blast-wa",
   "dependencies": {
     "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.0",
