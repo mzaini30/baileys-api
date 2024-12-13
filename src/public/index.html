@@ -22,12 +22,17 @@
       .bagian-tombol {
         padding-top: 10px;
       }
+      .wrap-tombol {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
     </style>
   </head>
   <body>
     <!-- bagian baru -->
     <div class="inner">
-      <div class="row">
+      <div class="row gy-3">
         <div class="col-md-4">
           <p><strong>List Nomor WA</strong> (jangan langsung banyak)</p>
           <textarea
@@ -65,9 +70,17 @@
                 <span class="total">100</span></span
               >
             </div>
-            <button class="btn btn-success tombol" onclick="kirimPesan()">
-              Kirim
-            </button>
+            <div class="wrap-tombol">
+              <button class="btn btn-success tombol" onclick="kirimPesan()">
+                Kirim
+              </button>
+              <button
+                class="btn btn-secondary tombol"
+                onclick="bersihkanMarkdown()"
+              >
+                Bersihkan Markdown
+              </button>
+            </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -292,10 +305,32 @@
         // Jika formatnya tidak dikenali, kembalikan null atau pesan error
         return null;
       }
+      function convertMarkdownToWA(markdownText) {
+        // Ubah *teks* menjadi _teks_
+        const italicRegex = /\*(.*?)\*/g;
+        markdownText = markdownText.replace(italicRegex, "_$1_");
+
+        // Ubah **teks** menjadi *teks*
+        const boldRegex = /\*\*(.*?)\*\*/g;
+        markdownText = markdownText.replace(boldRegex, "*$1*");
+
+        // Ubah [keterangan](link) menjadi link
+        const linkRegex = /\[(.*?)\]\((.*?)\)/g;
+        markdownText = markdownText.replace(linkRegex, "$2");
+
+        markdownText = markdownText.replace(/__/g, "*");
+
+        return markdownText;
+      }
+      function bersihkanMarkdown() {
+        let pesan = document.querySelector(".pesan");
+        pesan.value = convertMarkdownToWA(pesan.value);
+        localStorage.pesan = pesan.value;
+      }
       async function kirimPesan() {
         let nomor = document.querySelector(".nomor");
         let pesan = document.querySelector(".pesan");
-        let tombol = document.querySelector(".tombol");
+        let tombol = document.querySelectorAll(".tombol");
 
         let bagianMeter = document.querySelector(".bagian-meter");
         let sekarang = document.querySelector(".sekarang");
@@ -309,7 +344,7 @@
           });
         console.log(nomor);
 
-        tombol.classList.add("hidden");
+        tombol.forEach((x) => x.classList.add("hidden"));
         let banyakNomor = nomor.length;
         let nomorSelesai = 0;
 
@@ -361,7 +396,7 @@
             meter.value = nomorSelesai;
 
             if (nomorSelesai >= banyakNomor) {
-              tombol.classList.remove("hidden");
+              tombol.forEach((x) => x.classList.remove("hidden"));
               bagianMeter.classList.add("hidden");
             }
           }
