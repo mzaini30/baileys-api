@@ -351,6 +351,8 @@
         sekarang.innerText = 0;
         meter.value = 0;
 
+        document.title = `0 / ${banyakNomor}`;
+
         total.innerText = banyakNomor;
         meter.setAttribute("max", banyakNomor);
         meter.setAttribute("low", ~~(banyakNomor * 0.33)); // 33
@@ -395,9 +397,12 @@
             sekarang.innerText = nomorSelesai;
             meter.value = nomorSelesai;
 
+            document.title = `${nomorSelesai} / ${banyakNomor}`;
+
             if (nomorSelesai >= banyakNomor) {
               tombol.forEach((x) => x.classList.remove("hidden"));
               bagianMeter.classList.add("hidden");
+              document.title = "WA Marketing";
             }
           }
         }
