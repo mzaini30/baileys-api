@@ -27,13 +27,19 @@
         justify-content: space-between;
         gap: 10px;
       }
+      img {
+        max-width: 100%;
+      }
+      #pre {
+        max-height: calc(100vh - 160px);
+      }
     </style>
   </head>
   <body>
     <!-- bagian baru -->
     <div class="inner">
       <div class="row gy-3">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <p><strong>List Nomor WA</strong> (jangan langsung banyak)</p>
           <textarea
             name=""
@@ -45,7 +51,37 @@
             id=""
           ></textarea>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+          <p>
+            <strong>Gambar</strong>
+            <a href="https://imgbb.com/" target="_blank">(buka imgbb)</a>
+          </p>
+          <!-- <input
+            type="file"
+            class="form-control gambar-input mb-3"
+            onchange="dapatkanGambar(this)"
+          />
+          <img src="" class="gambar-img mb-3 d-block" alt="" />
+          <button
+            class="btn btn-danger reset-gambar hidden"
+            onclick="resetGambar()"
+          >
+            Reset
+          </button> -->
+          <input
+            name=""
+            placeholder="Masukkan URL Gambar"
+            class="form-control mb-3 olah-gambar-input"
+            oninput="ubahGambar()"
+            id=""
+          />
+          <img
+            class="olah-gambar-img"
+            src="https://pa1.narvii.com/6783/3ee5e0a016fc4829a13ab345313e72964618bb1b_00.gif"
+            alt=""
+          />
+        </div>
+        <div class="col-md-3">
           <p><strong>Teks WA</strong></p>
           <textarea
             name=""
@@ -83,9 +119,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <p><strong>Status</strong></p>
-          <pre class="" id="pre" style="">
+          <pre class="" id="pre">
 {
     message: "Here all the json will show"
 }</pre
@@ -203,6 +239,54 @@
     <!-- THIS INPUT IS FOR POST TOKEN -->
 
     <script>
+      function $(x) {
+        return document.querySelector(x);
+      }
+      function $$(x) {
+        return document.querySelectorAll(x);
+      }
+      // function dapatkanGambar(event) {
+      //   // console.log(event.files);
+      //   const file = event.files[0];
+
+      //   if (file) {
+      //     const reader = new FileReader();
+
+      //     // Saat file selesai dibaca
+      //     reader.onload = function (e) {
+      //       const base64String = e.target.result;
+
+      //       // Tampilkan di textarea
+      //       // document.getElementById("base64Output").value = base64String;
+
+      //       // Gunakan Base64 untuk menampilkan gambar
+      //       // document.getElementById("previewImage").src = base64String;
+      //       $(".gambar-img").setAttribute("src", base64String);
+      //     };
+
+      //     // Membaca file sebagai Data URL (Base64)
+      //     reader.readAsDataURL(file);
+      //     $(".reset-gambar").classList.remove("hidden");
+      //   }
+      // }
+      // function resetGambar() {
+      //   $(".gambar-img").setAttribute("src", "");
+      //   $(".reset-gambar").classList.add("hidden");
+      // }
+
+      function ubahGambar() {
+        if ($(".olah-gambar-input").value.length > 0) {
+          $(".olah-gambar-img").setAttribute(
+            "src",
+            $(".olah-gambar-input").value
+          );
+        } else {
+          $(".olah-gambar-img").setAttribute(
+            "src",
+            "https://pa1.narvii.com/6783/3ee5e0a016fc4829a13ab345313e72964618bb1b_00.gif"
+          );
+        }
+      }
       let pesan = document.querySelector(".pesan");
       pesan.addEventListener("input", () => {
         localStorage.pesan = pesan.value;
@@ -361,12 +445,30 @@
         bagianMeter.classList.remove("hidden");
 
         for (let x of nomor) {
-          const dataPost = {
-            token: checkToken.value,
-            number: x,
-            text: pesan.value,
-          };
-          const req = await fetch("/api/whatsapp/send-text", {
+          let targetApi = "";
+          let dataPost = {};
+
+          if ($(".olah-gambar-input").value.length > 0) {
+            // pakai gambar
+            dataPost = {
+              token: checkToken.value,
+              number: x,
+              type: "image",
+              url: $(".olah-gambar-input").value,
+              fileName: "",
+              caption: pesan.value,
+            };
+            targetApi = "/api/whatsapp/send-media";
+          } else {
+            // teks aja
+            dataPost = {
+              token: checkToken.value,
+              number: x,
+              text: pesan.value,
+            };
+            targetApi = "/api/whatsapp/send-text";
+          }
+          const req = await fetch(targetApi, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
