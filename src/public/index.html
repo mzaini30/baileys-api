@@ -71,7 +71,7 @@
           <input
             name=""
             placeholder="Masukkan URL Gambar"
-            class="form-control mb-3 olah-gambar-input"
+            class="form-control mb-3 olah-gambar-input gambar"
             oninput="ubahGambar()"
             id=""
           />
@@ -288,11 +288,27 @@
         }
       }
       let pesan = document.querySelector(".pesan");
+      let gambar = document.querySelector(".gambar");
+      let nomor = document.querySelector(".nomor");
+      // gambar, nomor
+
       pesan.addEventListener("input", () => {
         localStorage.pesan = pesan.value;
       });
+      gambar.addEventListener("input", () => {
+        localStorage.gambar = gambar.value;
+      });
+      nomor.addEventListener("input", () => {
+        localStorage.nomor = nomor.value;
+      });
       if (localStorage.pesan) {
         pesan.value = localStorage.pesan;
+      }
+      if (localStorage.gambar) {
+        gambar.value = localStorage.gambar;
+      }
+      if (localStorage.nomor) {
+        nomor.value = localStorage.nomor;
       }
 
       // prompter optional
